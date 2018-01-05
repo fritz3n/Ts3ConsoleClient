@@ -20,7 +20,7 @@ namespace TS3Client
     class CommandHandler
     {
         Ts3FullClient client;
-        string id = "MG4DAgeAAgEgAiBS+hoIho/ordh0XyT6J0TkwvB4Ns7qh092IP2VpEoVQwIgPPg7EBg9taS2DaAKW4r5GqC3EMoBIeK3DdIFR0RF/DQCIQCbgJtcMofkMtBxRUvubtbyTiNh6hDq7xGDN3H7NnN0OA==";
+        string id = "MG4DAgeAAgEgAiBza7WaNgvJvT4hmNQzDSmT1iuwHSa8RxEhgqjbfx174gIgSYAD+Z9Ecfq57RyHfQFNTl+1C24Uy0R57qj9Jd9KzX8CIQDvupoKOJk7jCeYYiMhvGOsKX1R38IRrRIschiwfA9dyQ==";
 
         public CommandHandler()
         {
@@ -29,18 +29,47 @@ namespace TS3Client
             Player.client = client;
             TsEventHandler.StartEventHandler(client);
         }
-        
+        [Desc("Change the clients name")]
+        public void ChangeName(string name = "FaceBot")
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                return;
+            }
+            else
+            {
+                client.ChangeName(name);
+            }
+        }
+        [Desc("Change the clients description")]
+        public void ChangeDescription(string description = "FaceBot")
+        {
+            if (String.IsNullOrEmpty(description))
+            {
+                return;
+            }
+            else
+            {
+                client.ChangeDescription(description,client.ClientId);
+            }
+        }
+
         [Alias("c")]
         [Desc("Connect the bot")]
-        public string Connect(string Name = "FaCeBaMm", string Url = "c0d1n6.io")
+        public string Connect(string Name = "FaceBot", string Url = "c0d1n6.io",bool generateNewIdentity=true)
         {
             Console.WriteLine(Url);
 
             ConnectionDataFull Join = new ConnectionDataFull();
 
             Join.Address = "c0d1n6.io";
-
-            Join.Identity = Ts3Crypt.LoadIdentity(id, ulong.Parse("21824056"));
+            if (generateNewIdentity==false) {
+                Join.Identity = Ts3Crypt.LoadIdentity(id, ulong.Parse("187602236"));
+            }
+            else
+            {
+                Join.Identity = Ts3Crypt.GenerateNewIdentity();
+            }
 
             Join.Username = Name;
             Join.VersionSign = VersionSign.VER_WIN_3_0_19_4;
@@ -56,7 +85,17 @@ namespace TS3Client
             else
                 return "Error!";
         }
-
+        [Desc("List all available input sources...")]
+        public void ListInputs()
+        {
+            int  c = WaveIn.DeviceCount;
+            var x = WaveIn.GetCapabilities(0); 
+            for(int i = 0; i < c; i++)
+            {
+                x = WaveIn.GetCapabilities(i);
+                Console.WriteLine(i+"-"+x.ProductName);
+            }
+        }
         [Alias("dc")]
         [Desc("Disconnect the bot")]
         public string Disconnect()
@@ -169,7 +208,10 @@ namespace TS3Client
                 return "Not connected!";
 
             if (CommandHelper.mic)
-                return "Already On!";
+            {
+                CommandHelper.StopMic();
+                return "Turned the Mic Off!";
+            }
 
             CommandHelper.StartMic(DeviceNumber);
 

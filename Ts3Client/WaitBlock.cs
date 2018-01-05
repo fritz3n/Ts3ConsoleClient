@@ -41,13 +41,19 @@ namespace TS3Client
 
 		public IEnumerable<T> WaitForMessage<T>() where T : IResponse, new()
 		{
-			if (isDisposed)
-				throw new ObjectDisposedException(nameof(WaitBlock));
-			if (!answerWaiter.WaitOne(CommandTimeout))
-				throw new Ts3CommandException(Util.TimeOutCommandError);
-			if (commandError.Id != Ts3ErrorCode.ok)
-				throw new Ts3CommandException(commandError);
-
+            try
+            {
+                if (isDisposed)
+                    throw new ObjectDisposedException(nameof(WaitBlock));
+                if (!answerWaiter.WaitOne(CommandTimeout))
+                    throw new Ts3CommandException(Util.TimeOutCommandError);
+                if (commandError.Id != Ts3ErrorCode.ok)
+                    throw new Ts3CommandException(commandError);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
 			return CommandDeserializer.GenerateResponse<T>(commandLine);
 		}
 
