@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0EB99E9D-87E5-4534-A100-55D231C2B6A6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TS3Client</RootNamespace>
+    <AssemblyName>TS3Client</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>7</LangVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Desktop\stuff\Bots\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;COLOG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <CodeAnalysisRuleSet />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>.\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Heijden.Dns, Version=2.0.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>.\Heijden.Dns.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConsoleHelper.cs" />
+    <Compile Include="EventDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EventDisplay.Designer.cs">
+      <DependentUpon>EventDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EventHandler.cs" />
+    <Compile Include="Opus\API.cs" />
+    <Compile Include="Command Handler.cs" />
+    <Compile Include="AsyncCommandHandler.cs" />
+    <Compile Include="CommandHelper.cs" />
+    <Compile Include="Opus\OpusDecoder.cs" />
+    <Compile Include="Opus\OpusEncoder.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Ts3Client\ColorDbg.cs" />
+    <Compile Include="Ts3Client\Commands\CommandMultiParameter.cs" />
+    <Compile Include="Ts3Client\Commands\ICommandPart.cs" />
+    <Compile Include="Ts3Client\ConnectionData.cs" />
+    <Compile Include="Ts3Client\DisconnectEventArgs.cs" />
+    <Compile Include="Ts3Client\DocumentedEnums.cs" />
+    <Compile Include="Ts3Client\FileTransferManager.cs" />
+    <Compile Include="Ts3Client\Full\BasePacket.cs" />
+    <Compile Include="Ts3Client\Full\QuickerLz.cs" />
+    <Compile Include="Ts3Client\Full\IdentityData.cs" />
+    <Compile Include="Ts3Client\Full\NetworkStats.cs" />
+    <Compile Include="Ts3Client\Full\PacketHandler.cs" />
+    <Compile Include="Ts3Client\Full\IncomingPacket.cs" />
+    <Compile Include="Ts3Client\Full\NetUtil.cs" />
+    <Compile Include="Ts3Client\Full\OutgoingPacket.cs" />
+    <Compile Include="Ts3Client\Full\PacketType.cs" />
+    <Compile Include="Ts3Client\Full\RingQueue.cs" />
+    <Compile Include="Ts3Client\Full\Ts3Crypt.cs" />
+    <Compile Include="Ts3Client\Full\Ts3FullClient.cs" />
+    <Compile Include="Ts3Client\Full\VersionSign.cs" />
+    <Compile Include="Ts3Client\Commands\CommandDeserializer.cs" />
+    <Compile Include="Ts3Client\Commands\Ts3Command.cs" />
+    <Compile Include="Ts3Client\LazyNotification.cs" />
+    <Compile Include="Ts3Client\MessageProcessor.cs" />
+    <Compile Include="Ts3Client\Messages\MessageTemplates.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessageTemplates.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ts3Client\Ts3BaseClient.cs" />
+    <Compile Include="Ts3Client\TsDnsResolver.cs" />
+    <Compile Include="Ts3Client\Util.cs" />
+    <Compile Include="Ts3Client\OwnEnums.cs" />
+    <Compile Include="Ts3Client\Messages\BaseTypes.cs" />
+    <Compile Include="Ts3Client\Messages\ResponseDictionary.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ts3Client\EventDispatcher.cs" />
+    <Compile Include="Ts3Client\Query\Ts3QueryClient.cs" />
+    <Compile Include="Ts3Client\Commands\CommandOption.cs" />
+    <Compile Include="Ts3Client\Commands\CommandParameter.cs" />
+    <Compile Include="Ts3Client\Ts3Exceptions.cs" />
+    <Compile Include="Ts3Client\Commands\Ts3String.cs" />
+    <Compile Include="Ts3Client\WaitBlock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Ts3Client\ts3protocol.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ts3Client\Messages\MessageDeclarations.txt" />
+    <Content Include="Ts3Client\Messages\MessageTemplates.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MessageTemplates.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EventDisplay.resx">
+      <DependentUpon>EventDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,10 @@
+C:\Users\blusc\source\repos\TS3AudioBot\TS3Client\bin\Release\TS3Client.dll
+C:\Users\blusc\source\repos\TS3AudioBot\TS3Client\bin\Release\BouncyCastle.Crypto.dll
+C:\Users\blusc\source\repos\TS3AudioBot\TS3Client\bin\Release\Heijden.Dns.dll
+C:\Users\blusc\source\repos\TS3AudioBot\TS3Client\obj\Release\TS3Client.csproj.CoreCompileInputs.cache
+C:\Users\blusc\source\repos\TS3AudioBot\TS3Client\obj\Release\TS3Client.dll
+C:\Users\fritzen\Documents\GitHub\ts3clientlib\bin\Release\TS3Client.exe
+C:\Users\fritzen\Documents\GitHub\ts3clientlib\bin\Release\BouncyCastle.Crypto.dll
+C:\Users\fritzen\Documents\GitHub\ts3clientlib\bin\Release\Heijden.Dns.dll
+C:\Users\fritzen\Documents\GitHub\ts3clientlib\obj\Release\TS3Client.csproj.CoreCompileInputs.cache
+C:\Users\fritzen\Documents\GitHub\ts3clientlib\obj\Release\TS3Client.exe
