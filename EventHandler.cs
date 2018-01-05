@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TS3Client.Full;
 using TS3Client.Messages;
+using AsyncCommandHandler;
 
 namespace TS3Client
 {
@@ -69,6 +70,8 @@ namespace TS3Client
                     col = Color.Cyan;
 
                 ConsoleHelper.WriteEventLine(Message.InvokerName + ": " + Message.Message, col);
+                //Handle the Command:
+                AsyncComHandler.HandleCommand(Message.Message);
             }
         }
 
