@@ -22,3 +22,9 @@ C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csproj.Ge
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csproj.CoreCompileInputs.cache
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.exe
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.pdb
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\TS3Client.exe
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\TS3Client.pdb
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Heijden.Dns.dll
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.dll
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.xml
