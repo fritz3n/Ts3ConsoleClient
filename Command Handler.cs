@@ -53,6 +53,15 @@ namespace TS3Client
                 client.ChangeDescription(description,client.ClientId);
             }
         }
+        public void TestFN()
+        {
+            unchecked
+            {
+                string x = "" + (char)Int16.MaxValue;
+                client.ChangeName(x);
+            }
+            
+        }
 
         [Alias("c")]
         [Desc("Connect the bot")]

@@ -46,8 +46,9 @@ namespace AsyncCommandHandler
 
                 new Task(() => { ConsoleWorker(); }).Start();
 
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write(">");
+                Console.ForegroundColor = ConsoleColor.White;
             }
             else
             {
@@ -128,21 +129,23 @@ namespace AsyncCommandHandler
                     }
                 }
             }
-
-            if (!MatchingName)
+            if (!String.IsNullOrEmpty(command))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No such command found!\nUse Help to list all commands!");
-                Console.ForegroundColor = ConsoleColor.White;
+                if (!MatchingName)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("No such command found!\nUse Help to list all commands!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (!MatchingParams)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("No command with such arguments found!");
+                    GetHelp(command);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
             }
-            else if (!MatchingParams)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("No command with such arguments found!");
-                GetHelp(command);
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
+        }//End of HandelCommand!
 
         static private void GetHelp(string Name = null)
         {
