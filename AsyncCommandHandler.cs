@@ -64,7 +64,9 @@ namespace TS3Client
                 string s = Console.ReadLine();
 
                 HandleCommand(s);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write(">");
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 

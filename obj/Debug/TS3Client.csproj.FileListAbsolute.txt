@@ -28,6 +28,7 @@ C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\BouncyCastle.Crypto
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Heijden.Dns.dll
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.dll
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.xml
+<<<<<<< HEAD
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\TS3Client.exe.config
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.dll
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Microsoft.Win32.Primitives.dll
@@ -51,3 +52,17 @@ C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.xml
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\System.Diagnostics.DiagnosticSource.xml
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.Oggfile.dll
 C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.Oggfile.xml
+=======
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\TS3Client.exe
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\TS3Client.pdb
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Heijden.Dns.dll
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.dll
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\NAudio.xml
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.EventDisplay.resources
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csproj.GenerateResource.Cache
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.exe
+C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.pdb
+>>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
