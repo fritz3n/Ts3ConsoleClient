@@ -146,6 +146,7 @@ namespace TS3Client
 
         public static void PlayYoutube(string Url, Context context)
         {
+            StopMusic();
             DeleteYtFIle();
             Process p = new Process();
 

@@ -56,6 +56,7 @@ namespace TS3Client
 
 
             client.Connect(Join);
+
             while (client.status == Ts3FullClient.Ts3ClientStatus.Connecting) { }
 
 
@@ -93,6 +94,20 @@ namespace TS3Client
             Disconnect();
             Environment.Exit(0);
         }
+
+         [Desc("Change the clients name")]
+         public string ChangeName([Consume] string name = "FaCeBoTt")
+         {
+             if (String.IsNullOrEmpty(name))
+             {
+                 return "Bad String!";
+             }
+             else
+             {
+                 client.ChangeName(name);
+                return "Ok";
+             }
+         }
 
         [Restriction(false)]
         [Desc("Execute a File")]
