@@ -1,0 +1,643 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Concentus.Oggfile</name>
+    </assembly>
+    <members>
+        <member name="T:Concentus.Oggfile.BufferedReadStream">
+            <summary>
+            A thread-safe, read-only, buffering stream wrapper.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.DataPacket">
+            <summary>
+            A single data packet from a logical Vorbis stream.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.DataPacket.PacketFlags">
+            <summary>
+            Defines flags to apply to the current packet
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.IsResync">
+            <summary>
+            Packet is first since reader had to resync with stream.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.IsEndOfStream">
+            <summary>
+            Packet is the last in the logical stream.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.IsShort">
+            <summary>
+            Packet does not have all its data available.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.HasGranuleCount">
+            <summary>
+            Packet has a granule count defined.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.User1">
+            <summary>
+            Flag for use by inheritors.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.User2">
+            <summary>
+            Flag for use by inheritors.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.User3">
+            <summary>
+            Flag for use by inheritors.
+            </summary>
+        </member>
+        <member name="F:Concentus.Oggfile.DataPacket.PacketFlags.User4">
+            <summary>
+            Flag for use by inheritors.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.GetFlag(Concentus.Oggfile.DataPacket.PacketFlags)">
+            <summary>
+            Gets the value of the specified flag.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.SetFlag(Concentus.Oggfile.DataPacket.PacketFlags,System.Boolean)">
+            <summary>
+            Sets the value of the specified flag.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance with the specified length.
+            </summary>
+            <param name="length">The length of the packet.</param>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadNextByte">
+            <summary>
+            Reads the next byte of the packet.
+            </summary>
+            <returns>The next byte if available, otherwise -1.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.Done">
+            <summary>
+            Indicates that the packet has been read and its data is no longer needed.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.TryPeekBits(System.Int32,System.Int32@)">
+            <summary>
+            Attempts to read the specified number of bits from the packet, but may return fewer.  Does not advance the position counter.
+            </summary>
+            <param name="count">The number of bits to attempt to read.</param>
+            <param name="bitsRead">The number of bits actually read.</param>
+            <returns>The value of the bits read.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="count"/> is not between 0 and 64.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.SkipBits(System.Int32)">
+            <summary>
+            Advances the position counter by the specified number of bits.
+            </summary>
+            <param name="count">The number of bits to advance.</param>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ResetBitReader">
+            <summary>
+            Resets the bit reader.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.IsResync">
+            <summary>
+            Gets whether the packet was found after a stream resync.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.GranulePosition">
+            <summary>
+            Gets the position of the last granule in the packet.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.PageGranulePosition">
+            <summary>
+            Gets the position of the last granule in the page the packet is in.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.Length">
+            <summary>
+            Gets the length of the packet.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.IsEndOfStream">
+            <summary>
+            Gets whether the packet is the last one in the logical stream.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.BitsRead">
+            <summary>
+            Gets the number of bits read from the packet.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.DataPacket.GranuleCount">
+            <summary>
+            Gets the number of granules in the packet.  If <c>null</c>, the packet has not been decoded yet.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadBits(System.Int32)">
+            <summary>
+            Reads the specified number of bits from the packet and advances the position counter.
+            </summary>
+            <param name="count">The number of bits to read.</param>
+            <returns>The value of the bits read.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The number of bits specified is not between 0 and 64.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.PeekByte">
+            <summary>
+            Reads the next byte from the packet.  Does not advance the position counter.
+            </summary>
+            <returns>The byte read from the packet.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadByte">
+            <summary>
+            Reads the next byte from the packet and advances the position counter.
+            </summary>
+            <returns>The byte read from the packet.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadBytes(System.Int32)">
+            <summary>
+            Reads the specified number of bytes from the packet and advances the position counter.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+            <returns>A byte array holding the data read.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads the specified number of bytes from the packet into the buffer specified and advances the position counter.
+            </summary>
+            <param name="buffer">The buffer to read into.</param>
+            <param name="index">The index into the buffer to start placing the read data.</param>
+            <param name="count">The number of bytes to read.</param>
+            <returns>The number of bytes read.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is less than 0 or <paramref name="index"/> + <paramref name="count"/> is past the end of <paramref name="buffer"/>.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadBit">
+            <summary>
+            Reads the next bit from the packet and advances the position counter.
+            </summary>
+            <returns>The value of the bit read.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadInt16">
+            <summary>
+            Retrieves the next 16 bits from the packet as a <see cref="T:System.Int16"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 16 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadInt32">
+            <summary>
+            Retrieves the next 32 bits from the packet as a <see cref="T:System.Int32"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 32 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadInt64">
+            <summary>
+            Retrieves the next 64 bits from the packet as a <see cref="T:System.Int64"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 64 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadUInt16">
+            <summary>
+            Retrieves the next 16 bits from the packet as a <see cref="T:System.UInt16"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 16 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadUInt32">
+            <summary>
+            Retrieves the next 32 bits from the packet as a <see cref="T:System.UInt32"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 32 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.ReadUInt64">
+            <summary>
+            Retrieves the next 64 bits from the packet as a <see cref="T:System.UInt64"/> and advances the position counter.
+            </summary>
+            <returns>The value of the next 64 bits.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.DataPacket.SkipBytes(System.Int32)">
+            <summary>
+            Advances the position counter by the specified number of bytes.
+            </summary>
+            <param name="count">The number of bytes to advance.</param>
+        </member>
+        <member name="T:Concentus.Oggfile.IContainerReader">
+            <summary>
+            Provides a interface for a Vorbis logical stream container.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IContainerReader.StreamSerials">
+            <summary>
+            Gets the list of stream serials found in the container so far.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IContainerReader.CanSeek">
+            <summary>
+            Gets whether the container supports seeking.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IContainerReader.WasteBits">
+            <summary>
+            Gets the number of bits in the container that are not associated with a logical stream.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IContainerReader.PagesRead">
+            <summary>
+            Gets the number of pages that have been read in the container.
+            </summary>
+        </member>
+        <member name="E:Concentus.Oggfile.IContainerReader.NewStream">
+            <summary>
+            Event raised when a new logical stream is found in the container.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.IContainerReader.Init">
+            <summary>
+            Initializes the container and finds the first stream.
+            </summary>
+            <returns><c>True</c> if a valid logical stream is found, otherwise <c>False</c>.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.IContainerReader.FindNextStream">
+            <summary>
+            Finds the next new stream in the container.
+            </summary>
+            <returns><c>True</c> if a new stream was found, otherwise <c>False</c>.</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.IContainerReader.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.IContainerReader.GetTotalPageCount">
+            <summary>
+            Retrieves the total number of pages in the container.
+            </summary>
+            <returns>The total number of pages.</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.IContainerReader.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="T:Concentus.Oggfile.IPacketProvider">
+            <summary>
+            Provides packets on-demand for the Vorbis stream decoder.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IPacketProvider.StreamSerial">
+            <summary>
+            Gets the serial number associated with this stream.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IPacketProvider.CanSeek">
+            <summary>
+            Gets whether seeking is supported on this stream.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.IPacketProvider.ContainerBits">
+            <summary>
+            Gets the number of bits of overhead in this stream's container.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.GetTotalPageCount">
+            <summary>
+            Retrieves the total number of pages (or frames) this stream uses.
+            </summary>
+            <returns>The page count.</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.IPacketProvider.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.GetNextPacket">
+            <summary>
+            Retrieves the next packet in the stream.
+            </summary>
+            <returns>The next packet in the stream or <c>null</c> if no more packets.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.PeekNextPacket">
+            <summary>
+            Retrieves the next packet in the stream but does not advance to the following packet.
+            </summary>
+            <returns>The next packet in the stream or <c>null</c> if no more packets.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.GetPacket(System.Int32)">
+            <summary>
+            Retrieves the packet specified from the stream.
+            </summary>
+            <param name="packetIndex">The index of the packet to retrieve.</param>
+            <returns>The specified packet.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="packetIndex"/> is less than 0 or past the end of the stream.</exception>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.IPacketProvider.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.GetGranuleCount">
+            <summary>
+            Retrieves the total number of granules in this Vorbis stream.
+            </summary>
+            <returns>The number of samples</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.IPacketProvider.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.FindPacket(System.Int64,System.Func{Concentus.Oggfile.DataPacket,Concentus.Oggfile.DataPacket,System.Int32})">
+            <summary>
+            Finds the packet index to the granule position specified in the current stream.
+            </summary>
+            <param name="granulePos">The granule position to seek to.</param>
+            <param name="packetGranuleCountCallback">A callback method that takes the current and previous packets and returns the number of granules in the current packet.</param>
+            <returns>The index of the packet that includes the specified granule position or -1 if none found.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="granulePos"/> is less than 0 or is after the last granule.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.IPacketProvider.SeekToPacket(Concentus.Oggfile.DataPacket,System.Int32)">
+            <summary>
+            Sets the next packet to be returned, applying a pre-roll as necessary.
+            </summary>
+            <param name="packet">The packet to key from.</param>
+            <param name="preRoll">The number of packets to return before the indicated packet.</param>
+        </member>
+        <member name="E:Concentus.Oggfile.IPacketProvider.ParameterChange">
+            <summary>
+            Occurs when the stream is about to change parameters.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.NewStreamEventArgs">
+            <summary>
+            Event data for when a new logical stream is found in a container.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.NewStreamEventArgs.#ctor(Concentus.Oggfile.IPacketProvider)">
+            <summary>
+            Creates a new instance of <see cref="T:Concentus.Oggfile.NewStreamEventArgs"/> with the specified <see cref="T:Concentus.Oggfile.IPacketProvider"/>.
+            </summary>
+            <param name="packetProvider">An <see cref="T:Concentus.Oggfile.IPacketProvider"/> instance.</param>
+        </member>
+        <member name="P:Concentus.Oggfile.NewStreamEventArgs.PacketProvider">
+            <summary>
+            Gets new the <see cref="T:Concentus.Oggfile.IPacketProvider"/> instance.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.NewStreamEventArgs.IgnoreStream">
+            <summary>
+            Gets or sets whether to ignore the logical stream associated with the packet provider.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.OggContainerReader">
+            <summary>
+            Provides an <see cref="T:Concentus.Oggfile.IContainerReader"/> implementation for basic Ogg files.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.OggContainerReader.StreamSerials">
+            <summary>
+            Gets the list of stream serials found in the container so far.
+            </summary>
+        </member>
+        <member name="E:Concentus.Oggfile.OggContainerReader.NewStream">
+            <summary>
+            Event raised when a new logical stream is found in the container.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.#ctor(System.IO.Stream,System.Boolean)">
+            <summary>
+            Creates a new instance with the specified stream.  Optionally sets to close the stream when disposed.
+            </summary>
+            <param name="stream">The stream to read.</param>
+            <param name="closeOnDispose"><c>True</c> to close the stream when <see cref="M:Concentus.Oggfile.OggContainerReader.Dispose"/> is called, otherwise <c>False</c>.</param>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.Init">
+            <summary>
+            Initializes the container and finds the first stream.
+            </summary>
+            <returns><c>True</c> if a valid logical stream is found, otherwise <c>False</c>.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.Dispose">
+            <summary>
+            Disposes this instance.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.GetStream(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Concentus.Oggfile.IPacketProvider"/> instance for the specified stream serial.
+            </summary>
+            <param name="streamSerial">The stream serial to look for.</param>
+            <returns>An <see cref="T:Concentus.Oggfile.IPacketProvider"/> instance.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The specified stream serial was not found.</exception>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.FindNextStream">
+            <summary>
+            Finds the next new stream in the container.
+            </summary>
+            <returns><c>True</c> if a new stream was found, otherwise <c>False</c>.</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.OggContainerReader.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="P:Concentus.Oggfile.OggContainerReader.PagesRead">
+            <summary>
+            Gets the number of pages that have been read in the container.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OggContainerReader.GetTotalPageCount">
+            <summary>
+            Retrieves the total number of pages in the container.
+            </summary>
+            <returns>The total number of pages.</returns>
+            <exception cref="T:System.InvalidOperationException"><see cref="P:Concentus.Oggfile.OggContainerReader.CanSeek"/> is <c>False</c>.</exception>
+        </member>
+        <member name="P:Concentus.Oggfile.OggContainerReader.CanSeek">
+            <summary>
+            Gets whether the container supports seeking.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.OggContainerReader.WasteBits">
+            <summary>
+            Gets the number of bits in the container that are not associated with a logical stream.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.OpusOggReadStream">
+            <summary>
+            Provides functionality to decode a basic .opus Ogg file, decoding the audio packets individually and returning them. Tags are also parsed if present.
+            Note that this currently assumes the input file only has 1 elementary stream; anything more advanced than that will probably not work.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggReadStream.#ctor(Concentus.Structs.OpusDecoder,System.IO.Stream)">
+            <summary>
+            Builds an Ogg file reader that decodes Opus packets from the given input stream, using a 
+            specified output sample rate and channel count. The given decoder will be used as-is
+            and return the decoded PCM buffers directly.
+            </summary>
+            <param name="decoder">An Opus decoder. If you are reusing an existing decoder, remember to call Reset() on it before
+            processing a new stream. The decoder is optional for cases where you may only be interested in the file tags</param>
+            <param name="oggFileInput">The input stream for an Ogg formatted .opus file. The stream will be read from immediately</param>
+        </member>
+        <member name="P:Concentus.Oggfile.OpusOggReadStream.Tags">
+            <summary>
+            Gets the tags that were parsed from the OpusTags Ogg packet, or NULL if no such packet was found.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.OpusOggReadStream.HasNextPacket">
+            <summary>
+            Returns true if there is still another data packet to be decoded from the current Ogg stream.
+            Note that this decoder currently only assumes that the input has 1 elementary stream with no splices
+            or other fancy things.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.OpusOggReadStream.LastError">
+            <summary>
+            If an error happened either in stream initialization, reading, or decoding, the message will appear here.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggReadStream.DecodeNextPacket">
+            <summary>
+            Reads the next packet from the Ogg stream and decodes it, returning the decoded PCM buffer.
+            If there are no more packets to decode, this returns NULL. If an error occurs, this also returns
+            NULL and puts the error message into the LastError field
+            </summary>
+            <returns>The decoded audio for the next packet in the stream, or NULL</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggReadStream.Initialize">
+            <summary>
+            Creates an opus decoder and reads from the ogg stream until a data packet is encountered,
+            queuing it up for future decoding. Tags are also parsed if they are encountered.
+            </summary>
+            <returns>True if the stream is valid and ready to be decoded</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggReadStream.QueueNextPacket">
+            <summary>
+            Looks for the next opus data packet in the Ogg stream and queues it up.
+            If the end of stream has been reached, this does nothing.
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.OpusOggWriteStream">
+            <summary>
+            A class for writing audio data as an .opus Ogg stream, using an Opus encoder provided in the constructor.
+            This will handle all of the buffering, packetization and Ogg container work in order to output standard-compliant
+            .opus files that can be played universally. Note that this makes very basic assumptions about output files:
+            - Only 1 elementary stream
+            - Segments may not span pages
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.#ctor(Concentus.Structs.OpusEncoder,System.IO.Stream,Concentus.Oggfile.OpusTags,System.Int32)">
+            <summary>
+            Constructs a stream that will accept PCM audio input, and automatically encode it to Opus and packetize it using Ogg,
+            writing the output pages to an underlying stream (usually a file stream).
+            You are allowed to change the encoding parameters mid-stream using the properties of the OpusEncoder; the only thing you
+            cannot change is the sample rate and num# of channels.
+            </summary>
+            <param name="encoder">An opus encoder to use for output</param>
+            <param name="outputStream">A base stream to accept the encoded ogg file output</param>
+            <param name="fileTags">(optional) A set of tags to include in the encoded file</param>
+            <param name="inputSampleRate">The actual real sample rate of your input data (NOT the encoder's sample rate).
+            The opus encoder usually requires 48Khz input, but most MP3s and such will give you 44.1Khz. To get the
+            sample rates to line up properly in this case, set the encoder to 48000 and pass inputSampleRate = 44100,
+            and the write stream will perform resampling for you automatically (Note that resampling will slow down
+            the encoding).</param>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.WriteSamples(System.Int16[],System.Int32,System.Int32)">
+            <summary>
+            Writes a buffer of PCM audio samples to the encoder and packetizer. Runs Opus encoding and potentially outputs one or more pages to the underlying Ogg stream.
+            You can write any non-zero number of samples that you want here; there are no restrictions on length or packet boundaries
+            </summary>
+            <param name="data">The audio samples to write. If stereo, this will be interleaved</param>
+            <param name="offset">The offset to use when reading data</param>
+            <param name="count">The amount of PCM data to write</param>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.WriteSamples(System.Single[],System.Int32,System.Int32)">
+            <summary>
+            Writes a buffer of PCM audio samples to the encoder and packetizer. Runs Opus encoding and potentially outputs one or more pages to the underlying Ogg stream.
+            You can write any non-zero number of samples that you want here; there are no restrictions on length or packet boundaries.
+            This function is slightly more wasteful than the short[] version because it has to convert the samples from float to fixed-point.
+            </summary>
+            <param name="data">The audio samples to write. If stereo, this will be interleaved</param>
+            <param name="offset">The offset to use when reading data</param>
+            <param name="count">The amount of PCM data to write</param>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.Finish">
+            <summary>
+            Call when you are finished encoding your file. This operation will close the underlying stream as well.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.WriteStreamFinishedPage">
+            <summary>
+            Writes an empty page containing only the EndOfStream flag
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.WriteOpusHeadPage">
+            <summary>
+            Writes the Ogg page for OpusHead, containing encoder information
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.WriteOpusTagsPage(Concentus.Oggfile.OpusTags)">
+            <summary>
+            Writes an Ogg page for the OpusTags, given an input tag set
+            </summary>
+            <param name="tags"></param>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.BeginNewPage">
+            <summary>
+            Clears all buffers and prepares a new page with an empty header
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.OpusOggWriteStream.FinalizePage">
+            <summary>
+            If the number of segments is nonzero, finalizes the page into a contiguous buffer, calculates CRC, and writes the page to the output stream
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.OpusTagName">
+            <summary>
+            Specifies const string values for common tag names
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.OpusTags">
+            <summary>
+            A set of tags that are read from / written to an Opus ogg file
+            </summary>
+        </member>
+        <member name="T:Concentus.Oggfile.ParameterChangeEventArgs">
+            <summary>
+            Event data for when a logical stream has a parameter change.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.ParameterChangeEventArgs.#ctor(Concentus.Oggfile.DataPacket)">
+            <summary>
+            Creates a new instance of <see cref="T:Concentus.Oggfile.ParameterChangeEventArgs"/>.
+            </summary>
+            <param name="firstPacket">The first packet after the parameter change.</param>
+        </member>
+        <member name="P:Concentus.Oggfile.ParameterChangeEventArgs.FirstPacket">
+            <summary>
+            Gets the first packet after the parameter change.  This would typically be the parameters packet.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.StreamReadBuffer.MinimalRead">
+            <summary>
+            Gets or Sets whether to limit reads to the smallest size possible.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.StreamReadBuffer.MaxSize">
+            <summary>
+            Gets or Sets the maximum size of the buffer.  This is not a hard limit.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.StreamReadBuffer.BaseOffset">
+            <summary>
+            Gets the offset of the start of the buffered data.  Reads to offsets before this are likely to require a seek.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.StreamReadBuffer.BytesFilled">
+            <summary>
+            Gets the number of bytes currently buffered.
+            </summary>
+        </member>
+        <member name="P:Concentus.Oggfile.StreamReadBuffer.Length">
+            <summary>
+            Gets the number of bytes the buffer can hold.
+            </summary>
+        </member>
+        <member name="M:Concentus.Oggfile.StreamReadBuffer.Read(System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Reads the number of bytes specified into the buffer given, starting with the offset indicated.
+            </summary>
+            <param name="offset">The offset into the stream to start reading.</param>
+            <param name="buffer">The buffer to read to.</param>
+            <param name="index">The index into the buffer to start writing to.</param>
+            <param name="count">The number of bytes to read.</param>
+            <returns>The number of bytes read.</returns>
+        </member>
+        <member name="M:Concentus.Oggfile.StreamReadBuffer.DiscardThrough(System.Int64)">
+            <summary>
+            Tells the buffer that it no longer needs to maintain any bytes before the indicated offset.
+            </summary>
+            <param name="offset">The offset to discard through.</param>
+        </member>
+    </members>
+</doc>

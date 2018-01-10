@@ -1,0 +1,9 @@
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\portable-net45+win8+wpa81+wp8\Concentus.dll
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\portable-net45+win8+wpa81+wp8\Concentus.pdb
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\portable-net45+win8+wpa81+wp8\Concentus.xml
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.csprojResolveAssemblyReference.cache
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.csproj.CoreCompileInputs.cache
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.AssemblyInfo.cs
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.dll
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.xml
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\portable-net45+win8+wpa81+wp8\Concentus.pdb

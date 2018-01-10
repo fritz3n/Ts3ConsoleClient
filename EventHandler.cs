@@ -22,6 +22,12 @@ namespace TS3Client
             client.OnClientLeftView += Client_OnClientLeftView;
             client.OnTextMessageReceived += Client_OnTextMessageReceived;
             client.OnClientMoved += Client_OnClientMoved;
+            client.OnErrorEvent += Client_OnErrorEvent;
+        }
+
+        private static void Client_OnErrorEvent(object sender, CommandError e)
+        {
+            ConsoleHelper.WriteEventLine(e.ErrorFormat(), Color.ForestGreen);
         }
 
         public static Dictionary<ushort, ClientData> Clients = new Dictionary<ushort, ClientData>();
@@ -35,12 +41,16 @@ namespace TS3Client
         {
             foreach (ClientEnterView Client in e)
             {
-                if (Client.ClientType == ClientType.Full)
+                try
                 {
-                    ConsoleHelper.WriteEventLine(Client.NickName + " entered view!", Color.Red);
+                    if (Client.ClientType == ClientType.Full)
+                    {
+                        Player.Connected(Client.ClientId);
+                        ConsoleHelper.WriteEventLine(Client.NickName + " entered view!(" + Client.Reason + ")", Color.ForestGreen);
+                    }
+                    Clients.Add(Client.ClientId, client.ClientList().Where((o) => o.ClientId == Client.ClientId).SingleOrDefault<ClientData>());
                 }
-                Clients.Add(Client.ClientId, client.ClientList().Where((o) => o.ClientId == Client.ClientId).Single<ClientData>());
-                
+                catch { }
             }
         }
 
@@ -48,11 +58,19 @@ namespace TS3Client
         {
             foreach (ClientLeftView Client in e)
             {
-                if (Clients[Client.ClientId].ClientType == ClientType.Full)
+                try
                 {
-                    ConsoleHelper.WriteEventLine(Clients[Client.ClientId].NickName + " left view!", Color.Red);
+                    if (Clients.ContainsKey(Client.ClientId))
+                    {
+                        if (Clients[Client.ClientId].ClientType == ClientType.Full)
+                        {
+                            Player.Connected(Client.ClientId);
+                            ConsoleHelper.WriteEventLine(Clients[Client.ClientId].NickName + " left view!(" + Client.Reason + ")", Color.ForestGreen);
+                        }
+                        Clients.Remove(Client.ClientId);
+                    }
                 }
-                Clients.Remove(Client.ClientId);
+                catch { }
             }
         }
 
@@ -69,6 +87,17 @@ namespace TS3Client
                     col = Color.Cyan;
 
                 ConsoleHelper.WriteEventLine(Message.InvokerName + ": " + Message.Message, col);
+
+                if (Message.InvokerId != client.ClientId && Message.Message.Trim().StartsWith("!b"))
+                {
+                    string[] ar = Message.Message.Split(new char[] { ' ' }, 2);
+                    string Msg = ar[1].TrimStart().Replace("[URL]","").Replace("[/URL]", "");
+
+                    ConsoleHelper.WriteEventLine("Executing: " + Msg, Color.Orange);
+
+                    new Task(() => { AsyncComHandler.HandleCommand(Msg, new Context(Message, client));  }).Start();
+                }
+
             }
         }
 

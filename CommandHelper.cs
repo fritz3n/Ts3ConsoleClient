@@ -1,4 +1,4 @@
-﻿using FragLabs.Audio.Codecs;
+﻿using Concentus;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 using TS3Client.Full;
 using TS3Client.Messages;
 using NAudio;
+using NAudio.Wave.SampleProviders;
+using Concentus.Structs;
+using System.Threading;
+using System.Diagnostics;
 
 namespace TS3Client
 {
@@ -17,7 +21,8 @@ namespace TS3Client
     {
         static public bool ConsColor = false;
         static public Ts3FullClient client;
-        static public bool mic = false; 
+        static public bool mic = false;
+        static Context context = new Context();
 
         public static string Escape(string text)
         { 
@@ -51,22 +56,14 @@ namespace TS3Client
         }
 
         static WaveIn waveIn;
-        static WaveOut _waveOut;
-        static BufferedWaveProvider _playBuffer;
         static OpusEncoder encoder;
-        static Opusencoder decoder; 
-        static int _segmentFrames;
-        static int _bytesPerSegment;
-        static ulong _bytesSent;
+        static int _bytesPerSegment = 1920;
 
         public static void StartMic(int Device = 0)
         {
-            _bytesSent = 0;
-            _segmentFrames = 960;
-            encoder = OpusEncoder.Create(48000, 1, FragLabs.Audio.Codecs.Opus.Application.Voip);
-            encoder.Bitrate = 20000;
-            //decoder = OpusDecoder.Create(48000, 1);
-            _bytesPerSegment = encoder.FrameByteCount(_segmentFrames);
+            encoder = new OpusEncoder(48000, 1,Concentus.Enums.OpusApplication.OPUS_APPLICATION_VOIP);
+            encoder.Bitrate = 50000;
+            encoder.Complexity = 8;
 
             waveIn = new WaveIn(WaveCallbackInfo.FunctionCallback());
             waveIn.BufferMilliseconds = 50;
@@ -75,8 +72,7 @@ namespace TS3Client
             waveIn.WaveFormat = new WaveFormat(48000, 16, 1);
             
             waveIn.StartRecording();
-
-
+            
             mic = true;
         }
 
@@ -104,9 +100,18 @@ namespace TS3Client
                 byte[] segment = new byte[byteCap];
                 for (int j = 0; j < segment.Length; j++)
                     segment[j] = soundBuffer[(i * byteCap) + j];
-                int len;
-                byte[] buff = encoder.Encode(segment, segment.Length, out len);
-                client.SendAudio(buff, len, Codec.OpusVoice);
+                
+                short[] inbuff = BytesToShorts(segment);
+
+                try
+                {
+                    byte[] buff = new byte[1275];
+                    int len = encoder.Encode(inbuff, 0, 960, buff, 0, 1275);
+                    client.SendAudio(buff, len, Codec.OpusVoice);
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
         }
 
@@ -117,7 +122,6 @@ namespace TS3Client
                 waveIn.StopRecording();
                 waveIn.Dispose();
                 waveIn = null;
-                encoder.Dispose();
                 encoder = null;
                 mic = false;
             }
@@ -127,50 +131,20 @@ namespace TS3Client
             }
         }
 
-
-        public static void Play(string path, int Device = 0)
+        private static short[] BytesToShorts(byte[] input)
         {
-            WaveFileReader orgread;
-            try
-            {
-                orgread = new WaveFileReader(path);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return;
-            }
-
-            WaveFloatTo16Provider read;
-            
-            read = new WaveFloatTo16Provider(orgread.ToSampleProvider().ToMono().ToWaveProvider());
-            
-            OpusEncoder encoder = OpusEncoder.Create(48000, 1, FragLabs.Audio.Codecs.Opus.Application.Voip);
-            encoder.Bitrate = 20000;
-
-            while (true) {
-                byte[] buff = new byte[100];
-                try
-                {
-                    read.Read(buff, 0, 100);
-                }catch {
-                    break;
-                }
-                
-                try
-                {
-                    byte[] encoded = encoder.Encode(buff, 100, out int len);
-
-                    client.SendAudio(encoded, len, Codec.OpusVoice);
-                }catch(Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-
-            }
+            return BytesToShorts(input, 0, input.Length);
         }
-
         
+        private static short[] BytesToShorts(byte[] input, int offset, int length)
+        {
+            short[] processedValues = new short[length / 2];
+            for (int c = 0; c < processedValues.Length; c++)
+            {
+                processedValues[c] = BitConverter.ToInt16(new byte[] { input[(c * 2) + offset], input[(c * 2) + 1 + offset] }, 0);
+            }
 
+            return processedValues;
+        }
     }
 }

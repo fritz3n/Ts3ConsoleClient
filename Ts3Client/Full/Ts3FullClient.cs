@@ -44,7 +44,7 @@ namespace TS3Client.Full
 		public string QuitMessage { get; set; } = "Disconnected";
 		/// <summary>The <see cref="Full.VersionSign"/> used to connect.</summary>
 		public VersionSign VersionSign { get; private set; }
-		private Ts3ClientStatus status;
+		public Ts3ClientStatus status;
 		public override bool Connected { get { lock (statusLock) return status == Ts3ClientStatus.Connected; } }
 		private ConnectionDataFull connectionDataFull;
 		private static bool HidePing = false;
@@ -589,7 +589,7 @@ namespace TS3Client.Full
 
 		#endregion
 
-		private enum Ts3ClientStatus
+		public enum Ts3ClientStatus
 		{
 			Disconnected,
 			Disconnecting,

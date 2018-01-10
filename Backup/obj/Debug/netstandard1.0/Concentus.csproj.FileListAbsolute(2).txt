@@ -1,0 +1,10 @@
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\netstandard1.0\Concentus.deps.json
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\netstandard1.0\Concentus.dll
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\netstandard1.0\Concentus.pdb
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\bin\Debug\netstandard1.0\Concentus.xml
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.csprojResolveAssemblyReference.cache
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.csproj.CoreCompileInputs.cache
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.AssemblyInfo.cs
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.dll
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.xml
+C:\Users\fritzen\Documents\GitHub\concentus\CSharp\Concentus\obj\Debug\netstandard1.0\Concentus.pdb

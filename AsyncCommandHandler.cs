@@ -7,8 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using TS3Client.Messages;
+using TS3Client.Full;
 
-namespace AsyncCommandHandler
+namespace TS3Client
 {
     public static class AsyncComHandler
     {
@@ -66,8 +68,38 @@ namespace AsyncCommandHandler
             }
         }
 
-        public static void HandleCommand(string Line)
+        public static void execute(string Data)
         {
+            string[] Lines = Data.Split(new[] { '\r', '\n' });
+
+            Console.WriteLine();
+
+            foreach(string Line in Lines)
+            {
+                Console.WriteLine("->" + Line);
+                HandleCommand(Line);
+            }
+
+        }
+
+        public static void execute(string[] Lines)
+        {
+            Console.WriteLine();
+
+            foreach (string Line in Lines)
+            {
+                Console.WriteLine("->" + Line);
+                HandleCommand(Line);
+            }
+
+        }
+
+        public static void HandleCommand(string Line, Context context = null)
+        {
+            if(context == null)
+                context = new Context();
+            
+
             string[] rawArray = Line.Split(new char[] { ' ' }, 2);
             string command = rawArray[0].ToLower();
 
@@ -76,7 +108,7 @@ namespace AsyncCommandHandler
             if (rawArray.Length > 1)
             {
 
-                string pattern = "[\"'](.*?)[\"']|([^ \"'\\s]+)";
+                string pattern = "[\"'](.*?[^\\\\])[\"']|([^ \"'\\s]+)";
 
                 Regex rgx = new Regex(pattern);
                 int[] groupNumbers = rgx.GetGroupNumbers();
@@ -101,11 +133,11 @@ namespace AsyncCommandHandler
             {
                 if(args.Count > 0)
                 {
-                    GetHelp(args[0]);
+                    GetHelp(args[0], context);
                 }
                 else
                 {
-                    GetHelp();
+                    GetHelp(null, context);
                 }
                 return;
             }
@@ -119,7 +151,7 @@ namespace AsyncCommandHandler
                 {
                     MatchingName = true;
 
-                    if (Desc.TryInvoke(args, Handler))
+                    if (Desc.TryInvoke(args, Handler, context))
                     {
                         MatchingParams = true;
                         break;
@@ -130,57 +162,66 @@ namespace AsyncCommandHandler
             if (!MatchingName)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("No such command found!\nUse Help to list all commands!");
+                context.WriteLine("No such command found!\nUse Help to list all commands!");
                 Console.ForegroundColor = ConsoleColor.White;
             }
             else if (!MatchingParams)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("No command with such arguments found!");
-                GetHelp(command);
+                context.WriteLine("No command with such arguments found!");
+                GetHelp(command,context);
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
-        static private void GetHelp(string Name = null)
+        static private void GetHelp(string Name = null, Context context = null)
         {
-            Console.WriteLine();
+            if (context == null)
+                context = new Context();
+
+            context.BufferOn();
+            context.WriteLine();
             foreach (MethodDescriptor Desc in Methods)
             {
-                if (Name == null || Desc.name.ToLower() == Name.ToLower())
+                if (Name == null || Desc.name.ToLower() == Name.ToLower() | Desc.Alias.Contains(Name.ToLower()))
                 {
-                    Console.Write(Desc.name + "(");
+                    Restriction rest = Desc.Info.GetCustomAttribute<Restriction>();
+                    if (rest != null && rest.ts == false)
+                        context.Write("[No Ts]");
+
+                    context.Write(Desc.name + "(");
                     for(int i = 0; i < Desc.Params.Length; i++)
                     {
                         ParameterInfo PInfo = Desc.Params[i];
 
                         if (PInfo.GetCustomAttribute(typeof(Consume)) != null)
-                            Console.Write("[greedy] ");
+                            context.Write("[greedy] ");
 
-                        Console.Write(PInfo.ParameterType.Name + " " + PInfo.Name);
+                        context.Write(PInfo.ParameterType.Name + " " + PInfo.Name);
 
                         if (PInfo.HasDefaultValue)
-                            Console.Write(" = \"" + (PInfo.DefaultValue != null ? PInfo.DefaultValue.ToString() : "NULL") + "\"");
+                            context.Write(" = \"" + (PInfo.DefaultValue != null ? PInfo.DefaultValue.ToString() : "NULL") + "\"");
                         if (i != Desc.Params.Length - 1)
-                            Console.Write(", ");
+                            context.Write(", ");
                     }
-                    Console.WriteLine(")");
-                    Console.WriteLine("-" + Desc.Description);
+                    context.WriteLine(")");
+                    context.WriteLine("-" + Desc.Description);
 
                     if(Desc.Alias.Length != 0)
                     {
-                        Console.Write("Alias:");
+                        context.Write("Alias:");
                         foreach(string Alias in Desc.Alias)
                         {
-                            Console.Write(" " + Alias);
+                            context.Write(" " + Alias);
                         }
-                        Console.WriteLine();
+                        context.WriteLine();
                     }
 
                     if (Name == null)
-                        Console.WriteLine();
+                        context.WriteLine();
                 }
             }
+            context.Flush();
         }
 
 
@@ -192,7 +233,7 @@ namespace AsyncCommandHandler
 
     public class MethodDescriptor
     {
-        private MethodInfo Info;
+        public MethodInfo Info;
         public ParameterInfo[] Params;
         public int MinParams = 0;
         public int MaxParams = 0;
@@ -234,9 +275,7 @@ namespace AsyncCommandHandler
                 Alias = aliasAttribute.alias;
             else
                 Alias = new string[0];
-
-            //Description = ((DisplayAttribute)Info.CustomAttributes.ToArray()[0]).Description;
-
+            
             MaxParams = Params.Length;
 
             foreach(ParameterInfo ParamInfo in Params)
@@ -253,13 +292,17 @@ namespace AsyncCommandHandler
             }
         }
 
-        public bool TryInvoke(List<string> Arguments, object Handler)
+        public bool TryInvoke(List<string> Arguments, object Handler, Context context)
         {
             if(Arguments.Count < MinParams | Arguments.Count > MaxParams)
             {
                 return false;
             }
-            
+
+            if (!CheckRestriction(context))
+            {
+                return false;
+            }
 
             object[] ParsedAguments = new object[Params.Length];
 
@@ -312,6 +355,8 @@ namespace AsyncCommandHandler
             }
             object Return = null;
 
+            ((CommandHandler)Handler).context = context;
+
             try
             {
                 Return = Info.Invoke(Handler, ParsedAguments);
@@ -324,9 +369,26 @@ namespace AsyncCommandHandler
             }
 
             if (Return != null)
-                Console.WriteLine(Return);
+            {
+                context.WriteLine(Return);
+            }
 
             return true;
+        }
+
+        private bool CheckRestriction(Context context)
+        {
+            Restriction Rest = Info.GetCustomAttribute<Restriction>();
+
+            if (Rest == null)
+                return true;
+
+            if (context.useTs & Rest.ts)
+                return true;
+            if (!context.useTs & Rest.console)
+                return true;
+
+            return false;
         }
 
     }
@@ -353,6 +415,18 @@ namespace AsyncCommandHandler
 
     public class Consume : Attribute
     {
+    }
+
+    public class Restriction : Attribute
+    {
+        public bool console = true;
+        public bool ts = true;
+
+        public Restriction(bool Ts = true, bool Console = true)
+        {
+            console = Console;
+            ts = Ts;
+        }
     }
 
 }
