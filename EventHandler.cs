@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TS3Client.Full;
 using TS3Client.Messages;
-using AsyncCommandHandler;
 
 namespace TS3Client
 {
@@ -88,7 +87,6 @@ namespace TS3Client
                     col = Color.Cyan;
 
                 ConsoleHelper.WriteEventLine(Message.InvokerName + ": " + Message.Message, col);
-<<<<<<< HEAD
 
                 if (Message.InvokerId != client.ClientId && Message.Message.Trim().StartsWith("!b"))
                 {
@@ -99,11 +97,6 @@ namespace TS3Client
 
                     new Task(() => { AsyncComHandler.HandleCommand(Msg, new Context(Message, client));  }).Start();
                 }
-
-=======
-                //Handle the Command:
-                AsyncComHandler.HandleCommand(Message.Message);
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
             }
         }
 

@@ -19,12 +19,8 @@ namespace TS3Client
     class CommandHandler
     {
         Ts3FullClient client;
-<<<<<<< HEAD
         string id = "MG4DAgeAAgEgAiA6LClUWJNGHGDXPdvY9zDBl7uiGUyFYnqUN0KD7xSx/wIhAItdd2gsoToPT6m8ryjb4VfNPEyrrs9L2QgBQFRo2nZ4AiAVizKxZhKHkad6n+uaY/3s2OQ+6V+N9VI9gr2JwI2pGg==";
         public Context context;
-=======
-        string id = "MG4DAgeAAgEgAiBza7WaNgvJvT4hmNQzDSmT1iuwHSa8RxEhgqjbfx174gIgSYAD+Z9Ecfq57RyHfQFNTl+1C24Uy0R57qj9Jd9KzX8CIQDvupoKOJk7jCeYYiMhvGOsKX1R38IRrRIschiwfA9dyQ==";
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
 
         public CommandHandler()
         {
@@ -34,7 +30,6 @@ namespace TS3Client
             TsEventHandler.StartEventHandler(client);
             MusicPlayer.Init(client);
         }
-<<<<<<< HEAD
 
         ~CommandHandler()
         {
@@ -45,58 +40,16 @@ namespace TS3Client
         [Alias("c")]
         [Desc("Connect the bot")]
         public string Connect(string Name = "FaCeBoTt", string Url = "c0d1n6.io")
-=======
-        [Desc("Change the clients name")]
-        public void ChangeName(string name = "FaceBot")
-        {
-            if (String.IsNullOrEmpty(name))
-            {
-                return;
-            }
-            else
-            {
-                client.ChangeName(name);
-            }
-        }
-        [Desc("Change the clients description")]
-        public void ChangeDescription(string description = "FaceBot")
-        {
-            if (String.IsNullOrEmpty(description))
-            {
-                return;
-            }
-            else
-            {
-                client.ChangeDescription(description,client.ClientId);
-            }
-        }
-
-        [Alias("c")]
-        [Desc("Connect the bot")]
-        public string Connect(string Name = "FaceBot", string Url = "c0d1n6.io",bool generateNewIdentity=true)
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
         {
             Console.WriteLine(Url);
 
             ConnectionDataFull Join = new ConnectionDataFull();
-
-<<<<<<< HEAD
             
 
             Join.Address = Url;
 
             //Join.Identity = Ts3Crypt.LoadIdentity(id, ulong.Parse("97698842"));
             Join.Identity = Ts3Crypt.GenerateNewIdentity();
-=======
-            Join.Address = "c0d1n6.io";
-            if (generateNewIdentity==false) {
-                Join.Identity = Ts3Crypt.LoadIdentity(id, ulong.Parse("187602236"));
-            }
-            else
-            {
-                Join.Identity = Ts3Crypt.GenerateNewIdentity();
-            }
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
 
             Join.Username = Name;
             Join.HWID = "Cock 7";
@@ -115,22 +68,8 @@ namespace TS3Client
                 return "Error!";
             }
         }
-<<<<<<< HEAD
 
         [Restriction(false)]
-=======
-        [Desc("List all available input sources...")]
-        public void ListInputs()
-        {
-            int  c = WaveIn.DeviceCount;
-            var x = WaveIn.GetCapabilities(0); 
-            for(int i = 0; i < c; i++)
-            {
-                x = WaveIn.GetCapabilities(i);
-                Console.WriteLine(i+"-"+x.ProductName);
-            }
-        }
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
         [Alias("dc")]
         [Desc("Disconnect the bot")]
         public string Disconnect()
@@ -263,11 +202,7 @@ namespace TS3Client
             if (CommandHelper.mic)
             {
                 CommandHelper.StopMic();
-<<<<<<< HEAD
-                return "Turned mic off";
-=======
                 return "Turned the Mic Off!";
->>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
             }
 
             CommandHelper.StartMic(DeviceNumber);
