@@ -66,3 +66,5 @@ C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csproj.CoreC
 C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.exe
 C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.pdb
 >>>>>>> 9ee0ef17dcf405105094280dcd0b70c3500957ba
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\fritzen\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Newtonsoft.Json.xml

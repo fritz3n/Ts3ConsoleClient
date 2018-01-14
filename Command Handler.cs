@@ -22,6 +22,7 @@ namespace TS3Client
         string id = "MG4DAgeAAgEgAiA6LClUWJNGHGDXPdvY9zDBl7uiGUyFYnqUN0KD7xSx/wIhAItdd2gsoToPT6m8ryjb4VfNPEyrrs9L2QgBQFRo2nZ4AiAVizKxZhKHkad6n+uaY/3s2OQ+6V+N9VI9gr2JwI2pGg==";
         public Context context;
 
+
         public CommandHandler()
         {
             client = new Ts3FullClient(EventDispatchType.DoubleThread);
@@ -29,11 +30,12 @@ namespace TS3Client
             Player.client = client;
             TsEventHandler.StartEventHandler(client);
             MusicPlayer.Init(client);
+            Resources.client = client;
         }
 
         ~CommandHandler()
         {
-            MusicPlayer.DeleteYtFIle();
+            
         }
 
         [Restriction(false)]
@@ -78,7 +80,7 @@ namespace TS3Client
             if (!client.Connected)
                 return "Not connected!";
 
-            MusicPlayer.StopMusic();
+            MusicPlayer.State = State.Stopped;
             StopMic();
             StopVoice();
 
@@ -309,19 +311,70 @@ namespace TS3Client
 
         [Restriction(false)]
         [Alias("pl")]
-        [Desc("Play a Mp3 File")]
+        [Desc("Play an audio File or (Youtube) Url\nPornhub also supported ;)")]
         public string PlayFile(string Path)
         {
             if (!client.Connected)
                 return "Not connected!";
-            try
+
+            MusicPlayer.context = context;
+            return MusicPlayer.Play(Path);
+        }
+
+        [Restriction(false)]
+        [Alias("pl")]
+        [Desc("Play the Cue")]
+        public string PlayFile()
+        {
+            if (!client.Connected)
+                return "Not connected!";
+
+            MusicPlayer.context = context;
+            MusicPlayer.State = State.Playing;
+            return "Ok";
+        }
+
+        [Alias("cu")]
+        [Desc("Print current cue")]
+        public string Cue()
+        {
+            if (!client.Connected)
+                return "Not connected!";
+
+            context.BufferOn();
+            int I = 0;
+            foreach(Audio audio in MusicPlayer.cue)
             {
-                MusicPlayer.PlayFile(Path);
+                context.WriteLine(I + ": " + audio.VideoInfo());
+                I++;
             }
-            catch (Exception e)
-            {
-                context.WriteLine(e);
-            }
+            context.Flush();
+
+            return null;
+        }
+
+        [Alias("cu")]
+        [Desc("Cue a song")]
+        public string Cue(string Url)
+        {
+            if (!client.Connected)
+                return "Not connected!";
+
+            MusicPlayer.context = context;
+            MusicPlayer.CueAudio(Url);
+
+            return "Ok";
+        }
+
+        [Alias("cu")]
+        [Desc("Override cue Item")]
+        public string Cue(string Url, int Index)
+        {
+            if (!client.Connected)
+                return "Not connected!";
+
+            MusicPlayer.context = context;
+            MusicPlayer.CueAudio(Url, Index);
 
             return "Ok";
         }
@@ -332,7 +385,9 @@ namespace TS3Client
         {
             if (!client.Connected)
                 return "Not connected!";
-            MusicPlayer.StopMusic();
+
+            MusicPlayer.context = context;
+            MusicPlayer.State = State.Stopped;
 
             return "Ok";
         }
@@ -344,23 +399,12 @@ namespace TS3Client
             if (!client.Connected)
                 return "Not connected!";
 
+            MusicPlayer.context = context;
             MusicPlayer.Volume = Volume;
 
             return "Ok";
         }
-
-        [Alias("ply")]
-        [Desc("Play youtube link")]
-        public string PlayYT(string Url)
-        {
-            if (!client.Connected)
-                return "Not connected!";
-
-            MusicPlayer.PlayYoutube(Url, context);
-
-            return "Ok";
-        }
-
+        
         [Restriction(false)]
         [Desc("List Audio Input Devices and their id")]
         public string ListAudioInputs()
@@ -412,6 +456,11 @@ namespace TS3Client
         }
     }
 
+    public static class Resources
+    {
+        static public Ts3FullClient client;
+    }
+
     public class Context
     {
         public bool useTs = false;
@@ -434,6 +483,13 @@ namespace TS3Client
                     sender = client.ClientList().Where((o) => Message.InvokerId == o.ClientId).FirstOrDefault();
                 }
             }
+        }
+
+        public Context(bool UseChat)
+        {
+            useTs = UseChat;
+            if (useTs)
+                client = Resources.client;
         }
 
         public Context()
