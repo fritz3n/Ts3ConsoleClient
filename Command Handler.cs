@@ -65,13 +65,13 @@ namespace TS3Client
 
         [Alias("c")]
         [Desc("Connect the bot")]
-        public string Connect(string Name = "FaceBot", string Url = "c0d1n6.io",bool generateNewIdentity=true)
+        public string Connect(string name = "FaceBot", string url = "c0d1n6.io",bool generateNewIdentity=true)
         {
-            Console.WriteLine(Url);
+            Console.WriteLine(url);
 
             ConnectionDataFull Join = new ConnectionDataFull();
 
-            Join.Address = "c0d1n6.io";
+            Join.Address = url;
             if (generateNewIdentity==false) {
                 Join.Identity = Ts3Crypt.LoadIdentity(id, ulong.Parse("187602236"));
             }
@@ -80,15 +80,14 @@ namespace TS3Client
                 Join.Identity = Ts3Crypt.GenerateNewIdentity();
             }
 
-            Join.Username = Name;
+            Join.Username = name;
             Join.VersionSign = VersionSign.VER_WIN_3_0_19_4;
-            Join.HWID = "Cock 7";
+            Join.HWID = "123 7";
 
 
             client.Connect(Join);
 
-            Thread.Sleep(500);
-
+            Thread.Sleep(1000);
             if (client.Connected)
                 return "Ok";
             else

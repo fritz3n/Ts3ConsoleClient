@@ -71,7 +71,7 @@ namespace TS3Client
 
                 ConsoleHelper.WriteEventLine(Message.InvokerName + ": " + Message.Message, col);
                 //Handle the Command:
-                AsyncComHandler.HandleCommand(Message.Message);
+                //AsyncComHandler.HandleCommand(Message.Message);
             }
         }
 
