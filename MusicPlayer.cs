@@ -457,8 +457,8 @@ namespace TS3Client
 
                 string id = match.Groups[1].Captures[0].Value;
 
-                string url = $"https://www.googleapis.com/youtube/v3/videos?id={ id }&part=snippet&key=" + Keys.googleOAuth;
-
+                //string url = $"https://www.googleapis.com/youtube/v3/videos?id={ id }&part=snippet&key=" + Keys.googleOAuth;
+                string url = "";
                 WebRequest request = WebRequest.Create(url);
 
                 string response = new StreamReader(request.GetResponse().GetResponseStream()).ReadToEnd();

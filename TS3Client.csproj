@@ -139,7 +139,6 @@
     <Compile Include="Command Handler.cs" />
     <Compile Include="AsyncCommandHandler.cs" />
     <Compile Include="CommandHelper.cs" />
-    <Compile Include="Keys.cs" />
     <Compile Include="MusicPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
@@ -207,6 +206,7 @@
   <ItemGroup>
     <EmbeddedResource Include="EventDisplay.resx">
       <DependentUpon>EventDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
