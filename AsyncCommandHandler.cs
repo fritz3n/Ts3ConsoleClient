@@ -364,7 +364,7 @@ namespace TS3Client
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine();
+                Console.WriteLine(e.ToString());
                 Console.ForegroundColor = ConsoleColor.White;
             }
 

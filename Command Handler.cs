@@ -13,6 +13,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 using NAudio.Wave;
+using System.Reflection;
 
 namespace TS3Client
 {
@@ -64,6 +65,7 @@ namespace TS3Client
 
             if (client.Connected)
             {
+                SetDefaultAvatar();
                 return "Ok";
             }
             else
@@ -118,6 +120,37 @@ namespace TS3Client
             string[] lines = File.ReadAllLines(Path);
             AsyncComHandler.execute(lines);
         }
+        [Desc("Set Default Avatar")]
+        public void SetDefaultAvatar()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "TS3Client.png.png";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                client.UploadAvatar(stream);
+            }
+        }
+
+        public void ChangeAvatar()
+        {
+            //open a file dialog...
+            Stream myStream = null;
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Open Picture File";
+            dialog.Filter = "picture files|*.jpg;*.jpeg;*.png; |Any File|*.*";
+            dialog.InitialDirectory = @"C:\";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = dialog.OpenFile()) != null)
+                {
+                    using (myStream)
+                    {
+                        client.UploadAvatar(myStream);
+                    }
+                }
+            }
+        }
 
         [Desc("List clients")]
         public string List()
@@ -130,7 +163,9 @@ namespace TS3Client
             foreach (ClientData data in client.ClientList())
             {
                 CommandHelper.AlternateColor();
-                context.WriteLine(data.ClientId + "\t" + data.NickName);
+                //context.Write(data.ReturnCode);
+                context.WriteLine(data.ClientId + "\t" + data.NickName + "\t|");
+            
             }
             CommandHelper.ResetColor();
             context.Flush();
