@@ -32,7 +32,9 @@ namespace TS3Client
 		/// </summary>
 		public bool IsPasswordHashed { get; set; } = false;
 		/// <summary>
-		/// Set this to the TeamSpeak 3 Version this client should appear as.
+		/// Set this to the TeamSpeak 3 
+        /// 
+        /// this client should appear as.
 		/// You can find predefined version data in the <see cref="Full.VersionSign"/>
 		/// class. Please keep in mind that the version data has to have valid sign
 		/// to be accepted by an official TeamSpeak 3 Server.

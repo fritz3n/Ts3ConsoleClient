@@ -61,8 +61,8 @@ namespace TS3Client
 
         public static void StartMic(int Device = 0)
         {
-            encoder = new OpusEncoder(48000, 1,Concentus.Enums.OpusApplication.OPUS_APPLICATION_VOIP);
-            encoder.Bitrate = 50000;
+            encoder = new OpusEncoder(48000, 1,Concentus.Enums.OpusApplication.OPUS_APPLICATION_AUDIO);
+            encoder.Bitrate = 110000;
             encoder.Complexity = 8;
 
             waveIn = new WaveIn(WaveCallbackInfo.FunctionCallback());

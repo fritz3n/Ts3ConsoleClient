@@ -106,7 +106,10 @@ namespace TS3Client
             return (int)Math.Sqrt(Vol * 10000);
         }
 
-        static public WaveFormatConversionProvider convert;
+        static public WaveFormatCon
+            
+            
+            Provider convert;
         static public IWaveProvider prov;
 
         private static void PlayWorker()
