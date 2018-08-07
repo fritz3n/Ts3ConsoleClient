@@ -74,6 +74,8 @@ namespace TS3Client
             }
         }
 
+
+
         [Restriction(false)]
         [Alias("dc")]
         [Desc("Disconnect the bot")]
