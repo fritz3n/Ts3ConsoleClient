@@ -299,7 +299,7 @@ namespace TS3Client
 
             new Task(() => { PlayWorker(); }, ct).Start();
 
-            new Context(true).WriteLine("Now Playing " + current.VideoInfo());
+            //new Context(true).WriteLine("Now Playing " + current.VideoInfo());
 
         }
 

@@ -17,12 +17,16 @@ namespace TS3Client
         {
             client = clien;
 
-            client.OnConnected += Client_OnConnected;
             client.OnClientEnterView += Client_OnClientEnterView;
             client.OnClientLeftView += Client_OnClientLeftView;
             client.OnTextMessageReceived += Client_OnTextMessageReceived;
             client.OnClientMoved += Client_OnClientMoved;
             client.OnErrorEvent += Client_OnErrorEvent;
+            client.OnConnected += Client_OnConnected;
+        }
+
+        private static void Client_OnConnected(object sender, EventArgs e)
+        {
         }
 
         private static void Client_OnErrorEvent(object sender, CommandError e)
@@ -32,17 +36,19 @@ namespace TS3Client
 
         public static Dictionary<ushort, ClientData> Clients = new Dictionary<ushort, ClientData>();
 
-        public static void Client_OnConnected(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
 
         public static void Client_OnClientEnterView(object sender, IEnumerable<ClientEnterView> e)
         {
             foreach (ClientEnterView Client in e)
             {
+                
                 try
                 {
+                    if (Client.TargetChannelId == 1 && Client.SourceChannelId == 0 && Client.ClientType != ClientType.Query)
+                    {
+                        MusicPlayer.Play(@"C:\Users\User\Documents\GitHub\Ts3ConsoleClient\Dreier.mp3");
+                    }
+
                     if (Client.ClientType == ClientType.Full)
                     {
                         Player.Connected(Client.ClientId);
@@ -76,7 +82,7 @@ namespace TS3Client
 
         public static void Client_OnTextMessageReceived(object sender, IEnumerable<TextMessage> e)
         {
-            foreach (TextMessage Message in e)
+            /*foreach (TextMessage Message in e)
             {
                 Color col = Color.White;
 
@@ -97,12 +103,19 @@ namespace TS3Client
 
                     new Task(() => { AsyncComHandler.HandleCommand(Msg, new Context(Message, client));  }).Start();
                 }
-            }
+            }*/
         }
 
         public static void Client_OnClientMoved(object sender, IEnumerable<ClientMoved> e)
         {
-            //throw new NotImplementedException();
+            foreach (ClientMoved c in e)
+            {
+                Console.WriteLine(c.TargetChannelId);
+                if (c.TargetChannelId == 1)
+                {
+                    MusicPlayer.Play(@"C:\Users\User\Documents\GitHub\Ts3ConsoleClient\Dreier.mp3");
+                }
+            }
         }
     }
 }
