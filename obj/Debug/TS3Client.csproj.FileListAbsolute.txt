@@ -93,4 +93,3 @@ C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.xml
 C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Concentus.Oggfile.xml
 C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\Newtonsoft.Json.xml
 C:\Users\User\Documents\GitHub\Ts3ConsoleClient\bin\Debug\System.Diagnostics.DiagnosticSource.xml
-C:\Users\User\Documents\GitHub\Ts3ConsoleClient\obj\Debug\TS3Client.csprojAssemblyReference.cache

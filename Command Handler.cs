@@ -151,10 +151,7 @@ namespace TS3Client
                 }
             }
         }
-        public void Chanelname()
-        {
 
-        }
         [Desc("List clients")]
         public string List()
         {
