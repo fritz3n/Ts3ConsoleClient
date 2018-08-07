@@ -34,7 +34,7 @@ namespace TS3Client
 
         public static void Client_OnConnected(object sender, EventArgs e)
         {
-            //CommandHandler
+            //throw new NotImplementedException();
         }
 
         public static void Client_OnClientEnterView(object sender, IEnumerable<ClientEnterView> e)
